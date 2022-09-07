@@ -1,0 +1,202 @@
+
+
+	create table IF NOT EXISTS `USUARIO` (
+		`id_usuario` BIGINT NOT NULL AUTO_INCREMENT, 
+		`nome_usuario` VARCHAR(255) NOT NULL, 
+		`data_validade` DATETIME NOT NULL, 
+		`senha_usuario` VARCHAR(255) NOT NULL, 
+		`email` VARCHAR(60) NOT NULL, 
+		`status_usuario` ----Undefinedsqltype:Generic---- NOT NULL, 
+		`TIPOPERMISSAO` ----Undefinedsqltype:Generic---- NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_usuario`)
+	);
+
+	create table IF NOT EXISTS `CATEGORIA` (
+		`id_categoria` INT NOT NULL AUTO_INCREMENT, 
+		`nome` VARCHAR(255) NOT NULL, 
+		`data_inclusao` DATETIME NOT NULL, 
+		`data_alteracao` DATETIME NOT NULL, 
+		`STATUSATIVIDADE` INT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_categoria`)
+	);
+
+	create table IF NOT EXISTS `CLASSIFICACAO_ITEM` (
+		`id_classificacao` INT NOT NULL AUTO_INCREMENT, 
+		`nome` VARCHAR(255) NOT NULL, 
+		`data_inclusao` DATETIME NOT NULL, 
+		`data_alteracao` DATETIME NOT NULL, 
+		`STATUSATIVIDADE` INT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_classificacao`)
+	);
+
+	create table IF NOT EXISTS `PRODUTO` (
+		`id_produto` BIGINT NOT NULL AUTO_INCREMENT, 
+		`nome` VARCHAR(255) NOT NULL, 
+		`descricao` TEXT NOT NULL, 
+		`data_insercao` DATETIME NOT NULL, 
+		`data_atualizacao` DATETIME NOT NULL, 
+		`rating` NUMERIC(0, 2) NULL, 
+		`STATUSATIVIDADE` INT NOT NULL, 
+		`id_marca` BIGINT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_produto`)
+	);
+
+	create table IF NOT EXISTS `PEDIDO` (
+		`id_pedido` BIGINT NOT NULL AUTO_INCREMENT, 
+		`data_inclusao` DATETIME NOT NULL, 
+		`data_alteracao` DATETIME NOT NULL, 
+		`STATUSPEDIDO` ----Undefinedsqltype:Generic---- NOT NULL, 
+		`id_usuario` BIGINT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_pedido`)
+	);
+
+	create table IF NOT EXISTS `ANEXO_IMAGEM` (
+		`id_anexo` INT NOT NULL AUTO_INCREMENT, 
+		`descricao` TEXT NOT NULL, 
+		`id_produto` BIGINT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_anexo`)
+	);
+
+	create table IF NOT EXISTS `MARCA` (
+		`id_marca` BIGINT NOT NULL AUTO_INCREMENT, 
+		`nome` VARCHAR(255) NOT NULL, 
+		`logo` TEXT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_marca`)
+	);
+
+	create table IF NOT EXISTS `PRODUTO_OPCAO` (
+		`id` BIGINT NOT NULL AUTO_INCREMENT, 
+		`nome` VARCHAR(5) NOT NULL, 
+		`cor` VARCHAR(20) NOT NULL, 
+		`preco` NUMERIC(0, 2) NOT NULL, 
+		`quantidade` INT NOT NULL, 
+		`id_produto` BIGINT NOT NULL, 
+		`id_opcao` BIGINT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id`)
+	);
+
+	create table IF NOT EXISTS `OPCAO` (
+		`id_opcao` BIGINT NOT NULL AUTO_INCREMENT, 
+		`nome` VARCHAR(0) NOT NULL, 
+		`STATUSATIVIDADE` INT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_opcao`)
+	);
+
+	create table IF NOT EXISTS `LOGRADOURO` (
+		`id_logradouro` INT NOT NULL AUTO_INCREMENT, 
+		`rua` VARCHAR(0) NOT NULL, 
+		`bairro` VARCHAR(0) NOT NULL, 
+		`numero` VARCHAR(0) NOT NULL, 
+		`cep` VARCHAR(0) NOT NULL, 
+		`cidade` VARCHAR(0) NOT NULL, 
+		`estado` VARCHAR(0) NOT NULL, 
+		`complemento` VARCHAR(0) NOT NULL, 
+		`uf` VARCHAR(2) NOT NULL, 
+		`apelido` VARCHAR(0) NULL, 
+		`id_usuario` BIGINT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_logradouro`)
+	);
+
+	create table IF NOT EXISTS `PRODUTO_CATEGORIA` (
+		`id` BIGINT NOT NULL AUTO_INCREMENT, 
+		`id_categoria` INT NOT NULL, 
+		`id_produto` BIGINT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id`)
+	);
+
+	create table IF NOT EXISTS `SUBCATEGORIA` (
+		`id_subcategoria` INT NOT NULL AUTO_INCREMENT, 
+		`nome` VARCHAR(255) NOT NULL, 
+		`data_inclusao` DATETIME NOT NULL, 
+		`data_alteracao` DATETIME NOT NULL, 
+		`STATUSATIVIDADE` INT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_subcategoria`)
+	);
+
+	create table IF NOT EXISTS `CATEGORIA_SUBCATEGORIA` (
+		`id` BIGINT NOT NULL AUTO_INCREMENT, 
+		`id_categoria` INT NOT NULL, 
+		`id_subcategoria` INT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id`)
+	);
+
+	create table IF NOT EXISTS `SUBCATEGORIA_CLASSIFICACAO` (
+		`id` BIGINT NOT NULL AUTO_INCREMENT, 
+		`id_classificacao` INT NOT NULL, 
+		`id_subcategoria` INT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id`)
+	);
+
+	create table IF NOT EXISTS `PEDIDO_PRODUTO` (
+		`id` BIGINT NOT NULL AUTO_INCREMENT, 
+		`id_produto` BIGINT NOT NULL, 
+		`id_pedido` BIGINT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id`)
+	);
+
+	create table IF NOT EXISTS `TAGS` (
+		`id_tag` BIGINT NOT NULL AUTO_INCREMENT, 
+		`nome` VARCHAR(255) NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_tag`)
+	);
+
+	create table IF NOT EXISTS `TAGS_PRODUTO` (
+		`id_tag_produto` BIGINT NOT NULL AUTO_INCREMENT, 
+		`id_tag` BIGINT NOT NULL, 
+		`id_produto` BIGINT NOT NULL, 
+		PRIMARY KEY CLUSTERED (
+			`id_tag_produto`)
+	);
+
+GO
+
+ALTER TABLE `PRODUTO` ADD CONSTRAINT `FK_PRODUTO_Marca` FOREIGN KEY (`id_marca`); REFERENCES `MARCA` (`id_marca`)
+CREATE INDEX IPRODUTO_Marca ON `PRODUTO` (`id_marca`);
+ALTER TABLE `PEDIDO` ADD CONSTRAINT `FK_PEDIDO_Usuario` FOREIGN KEY (`id_usuario`); REFERENCES `USUARIO` (`id_usuario`)
+CREATE INDEX IPEDIDO_Usuario ON `PEDIDO` (`id_usuario`);
+ALTER TABLE `ANEXO_IMAGEM` ADD CONSTRAINT `FK_ANEXO_IMAGEM_Produto` FOREIGN KEY (`id_produto`); REFERENCES `PRODUTO` (`id_produto`)
+CREATE INDEX IANEXO_IMAGEM_Produto ON `ANEXO_IMAGEM` (`id_produto`);
+ALTER TABLE `PRODUTO_OPCAO` ADD CONSTRAINT `FK_PRODUTO_OPCAO_Produto` FOREIGN KEY (`id_produto`); REFERENCES `PRODUTO` (`id_produto`)
+CREATE INDEX IPRODUTO_OPCAO_Produto ON `PRODUTO_OPCAO` (`id_produto`);
+ALTER TABLE `PRODUTO_OPCAO` ADD CONSTRAINT `FK_PRODUTO_OPCAO_Opcao` FOREIGN KEY (`id_opcao`); REFERENCES `OPCAO` (`id_opcao`)
+CREATE INDEX IPRODUTO_OPCAO_Opcao ON `PRODUTO_OPCAO` (`id_opcao`);
+ALTER TABLE `LOGRADOURO` ADD CONSTRAINT `FK_LOGRADOURO_Usuario` FOREIGN KEY (`id_usuario`); REFERENCES `USUARIO` (`id_usuario`)
+CREATE INDEX ILOGRADOURO_Usuario ON `LOGRADOURO` (`id_usuario`);
+ALTER TABLE `PRODUTO_CATEGORIA` ADD CONSTRAINT `FK_PRODUTO_CATEGORIA_Categoria` FOREIGN KEY (`id_categoria`); REFERENCES `CATEGORIA` (`id_categoria`)
+CREATE INDEX IPRODUTO_CATEGORIA_Categoria ON `PRODUTO_CATEGORIA` (`id_categoria`);
+ALTER TABLE `PRODUTO_CATEGORIA` ADD CONSTRAINT `FK_PRODUTO_CATEGORIA_Produto` FOREIGN KEY (`id_produto`); REFERENCES `PRODUTO` (`id_produto`)
+CREATE INDEX IPRODUTO_CATEGORIA_Produto ON `PRODUTO_CATEGORIA` (`id_produto`);
+ALTER TABLE `CATEGORIA_SUBCATEGORIA` ADD CONSTRAINT `FK_CATEGORIA_SUBCATEGORIA_Categoria` FOREIGN KEY (`id_categoria`); REFERENCES `CATEGORIA` (`id_categoria`)
+CREATE INDEX ICATEGORIA_SUBCATEGORIA_Categoria ON `CATEGORIA_SUBCATEGORIA` (`id_categoria`);
+ALTER TABLE `CATEGORIA_SUBCATEGORIA` ADD CONSTRAINT `FK_CATEGORIA_SUBCATEGORIA_SubCategoria` FOREIGN KEY (`id_subcategoria`); REFERENCES `SUBCATEGORIA` (`id_subcategoria`)
+CREATE INDEX ICATEGORIA_SUBCATEGORIA_SubCategoria ON `CATEGORIA_SUBCATEGORIA` (`id_subcategoria`);
+ALTER TABLE `SUBCATEGORIA_CLASSIFICACAO` ADD CONSTRAINT `FK_SUBCATEGORIA_CLASSIFICACAO_ClassificacaoItem` FOREIGN KEY (`id_classificacao`); REFERENCES `CLASSIFICACAO_ITEM` (`id_classificacao`)
+CREATE INDEX ISUBCATEGORIA_CLASSIFICACAO_ClassificacaoItem ON `SUBCATEGORIA_CLASSIFICACAO` (`id_classificacao`);
+ALTER TABLE `SUBCATEGORIA_CLASSIFICACAO` ADD CONSTRAINT `FK_SUBCATEGORIA_CLASSIFICACAO_SubCategoria` FOREIGN KEY (`id_subcategoria`); REFERENCES `SUBCATEGORIA` (`id_subcategoria`)
+CREATE INDEX ISUBCATEGORIA_CLASSIFICACAO_SubCategoria ON `SUBCATEGORIA_CLASSIFICACAO` (`id_subcategoria`);
+ALTER TABLE `PEDIDO_PRODUTO` ADD CONSTRAINT `FK_PEDIDO_PRODUTO_Produto` FOREIGN KEY (`id_produto`); REFERENCES `PRODUTO` (`id_produto`)
+CREATE INDEX IPEDIDO_PRODUTO_Produto ON `PEDIDO_PRODUTO` (`id_produto`);
+ALTER TABLE `PEDIDO_PRODUTO` ADD CONSTRAINT `FK_PEDIDO_PRODUTO_Pedido` FOREIGN KEY (`id_pedido`); REFERENCES `PEDIDO` (`id_pedido`)
+CREATE INDEX IPEDIDO_PRODUTO_Pedido ON `PEDIDO_PRODUTO` (`id_pedido`);
+ALTER TABLE `TAGS_PRODUTO` ADD CONSTRAINT `FK_TAGS_PRODUTO_Produto` FOREIGN KEY (`id_produto`); REFERENCES `PRODUTO` (`id_produto`)
+CREATE INDEX ITAGS_PRODUTO_Produto ON `TAGS_PRODUTO` (`id_produto`);
+ALTER TABLE `TAGS_PRODUTO` ADD CONSTRAINT `FK_TAGS_PRODUTO_Tags` FOREIGN KEY (`id_tag`); REFERENCES `TAGS` (`id_tag`)
+CREATE INDEX ITAGS_PRODUTO_Tags ON `TAGS_PRODUTO` (`id_tag`);
+
+-- <#keep(end)#><#/keep(end)#>
